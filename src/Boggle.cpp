@@ -36,6 +36,7 @@ static string BIG_BOGGLE_CUBES[25] = {
 Boggle::Boggle(Lexicon& dictionary, string boardText) {
     //store dictionary in Boggle's private Lexicon
     this->dict = dictionary;
+    this-> humanScore = 0;
 
     //set size of board
     this->board.resize(size, size);
@@ -69,6 +70,7 @@ Boggle::Boggle(Lexicon& dictionary, string boardText) {
         }
     }
     BoggleGUI::labelAllCubes(boardText);
+    BoggleGUI::setStatusMessage("Its your turn!");
 }
 
 /* Function: Gets letter at specific board location
@@ -102,6 +104,7 @@ bool Boggle::checkWord(string word) {
         if(humanWordSearch(word)){
             //string message = "You found a new word! \"" + toUpperCase(word) + "\"";
             BoggleGUI::setStatusMessage("You found a new word! \"" + toUpperCase(word) + "\"");
+            BoggleGUI::setScore(humanScore, BoggleGUI::HUMAN);
             return true;
         } else {
             BoggleGUI::setStatusMessage("That word can't be formed on this board.");
@@ -122,6 +125,7 @@ bool Boggle::humanWordSearch(string word) {     //assume word is >= 4 letters, h
             if(this->board[row][col] == word.at(0)){
                 if(humanWordSearchHelper(word.substr(1), row, col)){
                     this->found.add(word);
+                    this->humanScore++;
                     return true;
                 }
             }
@@ -132,14 +136,14 @@ bool Boggle::humanWordSearch(string word) {     //assume word is >= 4 letters, h
 }
 
 bool Boggle::humanWordSearchHelper(string word, int row, int col){
-    BoggleGUI::setHighlighted(row, col, false);
+    //BoggleGUI::setHighlighted(row, col, false);
     if(word.empty()){
         return true;
     } else {
         //check all neighbors
         for(int r = -1; r <= 1; r++){
             for(int c = -1; c <= 1; c++){
-                if(r != 0 && c != 0){   //remove original location
+                if(!(r == 0 && c == 0)){   //remove original location
                     int nRow = row + r;
                     int nCol = col + c;
                     if(!(nRow < 0 || nRow >= this->size || nCol < 0 || nCol >= this->size)){    //if not out of bounds
@@ -155,12 +159,13 @@ bool Boggle::humanWordSearchHelper(string word, int row, int col){
         }
     }
     }
+    BoggleGUI::setHighlighted(row, col, false);
     return false;
 }
 
 int Boggle::getScoreHuman() {
-    // TODO: implement
-    return 0;   // remove this
+    return this-> humanScore;
+
 }
 
 Set<string> Boggle::computerWordSearch() {
@@ -170,8 +175,7 @@ Set<string> Boggle::computerWordSearch() {
 }
 
 int Boggle::getScoreComputer() {
-    // TODO: implement
-    return 0;   // remove this
+    return this-> computerScore;
 }
 
 int Boggle::getSize(){
@@ -188,8 +192,17 @@ bool Boggle::alreadyFound(string word){
 }
 
 ostream& operator<<(ostream& out, Boggle& boggle) {
-    // TODO: implement
+    string boardLine = "";
+    int n = boggle.getSize();
+    for (int r =0; r< n; r++){
+        string boardLine = "";
+        for (int c =0; c < n; c++){
+            boardLine += boggle.getLetter(r,c);
+        }
+        cout <<boardLine<<endl;
+    }
     return out;
 }
+
 
 
