@@ -16,6 +16,7 @@ string promptForBoardText();
 bool isLetters(string boardText);
 //bool playerTurn (Boggle boggle);
 void updateStatus (string message, Boggle& boggle, Vector <string>& found);
+void playerTurn (Boggle& boggle, Vector<string>& found);
 
 void playOneGame(Lexicon& dictionary) {
     string boardText = "";
@@ -32,30 +33,7 @@ void playOneGame(Lexicon& dictionary) {
     Type a word (or Enter to stop):
     */
     Vector<string> found;
-    bool rightLastTurn = true;
-    string message;
-
-    while(true){
-        clearConsole();
-        if (rightLastTurn) {
-            message = "Its your turn!";
-        }
-        else {
-            message = "You must enter an unfound 4+ letter word from the dictionary.";
-        }
-        updateStatus (message, boggle, found);
-        string word;
-        word = getLine("Type a word (or Enter to stop): ");
-        if(word == ""){ break; }
-        word = toUpperCase(word);
-        if (boggle.checkWord(word)) {
-            found.add(word);
-            rightLastTurn = true;
-        }
-        else {
-            rightLastTurn = false;
-        }
-     }
+    playerTurn(boggle, found);
 
 }
 
@@ -94,6 +72,32 @@ bool isLetters(string str){
     return true;
 }
 
+void playerTurn (Boggle& boggle, Vector<string>& found) {
+    bool rightLastTurn = true;
+    string message;
+
+    while(true){
+        clearConsole();
+        if (rightLastTurn) {
+            message = "Its your turn!";
+        }
+        else {
+            message = "You must enter an unfound 4+ letter word from the dictionary.";
+        }
+        updateStatus (message, boggle, found);
+        string word;
+        word = getLine("Type a word (or Enter to stop): ");
+        if(word == ""){ break; }
+        word = toUpperCase(word);
+        if (boggle.checkWord(word)) {
+            found.add(word);
+            rightLastTurn = true;
+        }
+        else {
+            rightLastTurn = false;
+        }
+    }
+}
 void updateStatus (string message, Boggle& boggle, Vector <string>& found ) {
     cout<<message<< endl;
     cout<< boggle << endl;
@@ -101,6 +105,3 @@ void updateStatus (string message, Boggle& boggle, Vector <string>& found ) {
     cout <<  "Your words (0): " << found.toString()<< endl;
     cout << "Your score: " << boggle.getScoreHuman()<< endl;
 }
-
-
-
