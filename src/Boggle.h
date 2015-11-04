@@ -31,9 +31,10 @@ private:
     int size = 4;
     Grid<char> board;
     Lexicon dict;
-    Vector<string> found;
     bool alreadyFound(string word);
     bool humanWordSearchHelper(string word, int row, int col);
+    int humanScore;
 };
 
 #endif // _boggle_h
+
