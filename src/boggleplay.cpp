@@ -24,16 +24,8 @@ void playOneGame(Lexicon& dictionary) {
         boardText = promptForBoardText();
     }
     Boggle boggle(dictionary, boardText);
-    // clear console
-    // IT'S YOUR TURN
-    //Print the boggle board
-    // endl
-    /*Your words (0): {}
-    Your score: 0
-    Type a word (or Enter to stop):
-    */
     Vector<string> found;
-    playerTurn(boggle, found);
+    playerTurn(boggle, found); // human player takes turn
 
 }
 
@@ -71,13 +63,17 @@ bool isLetters(string str){
     }
     return true;
 }
-
+/* Function: implements Human player's turn.
+ * Usage: playerTurn (boggle, found);
+ * ==================================================================
+ * Description: prompts the player for words, and reacts accordingly
+ *  until the player gives up (signalled by pressing the enter key)
+ */
 void playerTurn (Boggle& boggle, Vector<string>& found) {
     bool rightLastTurn = true;
     string message = "Its your turn!";
 
     while(true){
-        clearConsole();
         updateStatus (message, boggle, found);
         string word;
         word = getLine("Type a word (or Enter to stop): ");
@@ -94,12 +90,22 @@ void playerTurn (Boggle& boggle, Vector<string>& found) {
         }
     }
 }
+/* Function: updates console with current state of game in this format:
+ *
+ * message
+ * Print the boggle board
+ * Your words (0): {}
+ * Your score: 0
+ * Type a word (or Enter to stop):
+ *
+ * Usage: updateStatus(message, boggle, found);
+ * ==================================================================
+ */
 void updateStatus (string message, Boggle& boggle, Vector <string>& found ) {
-    cout<<message<< endl;
+    clearConsole();
+    cout<< message << endl;
     cout<< boggle << endl;
     cout<<""<< endl;
     cout <<  "Your words (0): " << found.toString()<< endl;
     cout << "Your score: " << boggle.getScoreHuman()<< endl;
 }
-
-
